@@ -52,11 +52,14 @@ func (c *Context) String(code int, format string, values ...any) {
 }
 
 func (c *Context) JSON(code int, obj any) {
-	c.SetHeader("Content-Type", "application/json")
-	c.Status(code)
-	encoder := json.NewEncoder(c.Writer)
-	if err := encoder.Encode(obj); err != nil {
+	data, err := json.Marshal(obj)
+	
+	if err != nil {
 		http.Error(c.Writer, err.Error(), 500)
+	} else {
+		c.SetHeader("Content-Type", "application/json")
+		c.Status(code)
+		c.Writer.Write(data)
 	}
 }
 
