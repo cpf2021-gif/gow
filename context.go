@@ -15,6 +15,7 @@ type Context struct {
 	// request info
 	Path   string
 	Method string
+	Params map[string]string
 	// response info
 	StatusCode int
 }
@@ -26,6 +27,11 @@ func newContext(w http.ResponseWriter, req *http.Request) *Context {
 		Path:   req.URL.Path,
 		Method: req.Method,
 	}
+}
+
+func (c *Context) Param(key string) string {
+	value, _ := c.Params[key]
+	return value
 }
 
 func (c *Context) PostForm(key string) string {
@@ -53,7 +59,7 @@ func (c *Context) String(code int, format string, values ...any) {
 
 func (c *Context) JSON(code int, obj any) {
 	data, err := json.Marshal(obj)
-	
+
 	if err != nil {
 		http.Error(c.Writer, err.Error(), 500)
 	} else {
