@@ -4,10 +4,12 @@ import (
 	"net/http"
 
 	"github.com/cpf2021-gif/gow"
+	"github.com/cpf2021-gif/gow/middleware"
 )
 
 func main() {
 	r := gow.New()
+	r.Use(middleware.Logger())
 
 	r.GET("/", func(c *gow.Context) {
 		c.HTML(http.StatusOK, "<h1>Hello gow</h1>")
