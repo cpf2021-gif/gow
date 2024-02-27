@@ -1,9 +1,10 @@
 package gow
 
 import (
-	"log"
 	"net/http"
 	"strings"
+
+	"github.com/cpf2021-gif/gow/log"
 )
 
 type router struct {
@@ -45,7 +46,7 @@ func (r *router) addRoute(method string, pattern string, handler HandlerFunc) {
 	r.roots[method].insert(pattern, parts)
 	r.handlers[key] = handler
 
-	log.Printf("Route %4s - %s", method, pattern)
+	log.GetDefaultLog().Infof("Route %4s - %s", method, pattern)
 }
 
 func (r *router) getRoute(method string, path string) (*node, map[string]string) {
@@ -98,7 +99,7 @@ func (r *router) handle(c *Context) {
 		c.handlers = append(c.handlers, r.handlers[key])
 	} else {
 		c.handlers = append(c.handlers, func(c *Context) {
-			log.Printf("404 NOT FOUND: %s", c.Path)
+			log.GetDefaultLog().Warnf("404 NOT FOUND: %s", c.Path)
 			c.String(http.StatusNotFound, "404 NOT FOUND: %s\n", c.Path)
 		})
 	}
