@@ -12,7 +12,8 @@ func main() {
 	r.Use(middleware.Logger())
 
 	r.GET("/", func(c *gow.Context) {
-		c.HTML(http.StatusOK, "<h1>Hello gow</h1>")
+		// c.HTML(http.StatusOK, "<h1>Hello gow</h1>")
+		c.Render(200, page(), gow.H{})
 	})
 
 	r.GET("/hello", func(c *gow.Context) {
