@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/a-h/templ"
 )
 
 type H map[string]any
@@ -91,4 +93,11 @@ func (c *Context) HTML(code int, html string) {
 	c.SetHeader("Content-Type", "text/html")
 	c.Status(code)
 	c.Writer.Write([]byte(html))
+}
+
+func (c *Context) Render(code int, t templ.Component, data H) {
+	c.SetHeader("Content-Type", "text/html")
+	c.Status(code)
+
+	t.Render(c.Req.Context(), c.Writer)
 }
