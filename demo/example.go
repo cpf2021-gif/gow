@@ -1,15 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/cpf2021-gif/gow"
-	"github.com/cpf2021-gif/gow/middleware"
 )
 
 func main() {
-	r := gow.New()
-	r.Use(middleware.Logger())
+	r := gow.Default()
 
 	r.GET("/", func(c *gow.Context) {
 		// c.HTML(http.StatusOK, "<h1>Hello gow</h1>")
@@ -38,6 +37,9 @@ func main() {
 	v1 := r.Group("/v1")
 	{
 		v1.GET("/", func(c *gow.Context) {
+			// test panic
+			nums := []int{1, 2, 3}
+			fmt.Println(nums[100])
 			c.HTML(http.StatusOK, "<h1>Hello gow, v1<h1>")
 		})
 	}
